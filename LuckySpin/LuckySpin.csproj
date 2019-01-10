@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Spinner\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ViewComponents\PlayerNotice.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Shared\Components\PlayerNotice\Index.cshtml" />
+  </ItemGroup>
+</Project>
