@@ -10,16 +10,20 @@ namespace LuckySpin.Models
         //Properties
         public Player CurrentPlayer { get; set; }
 
-        public IEnumerable<Spin> PlayerSpins {
+        public IEnumerable<Spin> PlayerSpins { // Read Only Property
 
             get { return spins; }
         }
+
         //Interaction method
         public void AddSpin(Spin s)
         {
             spins.Add(s);
         }
-
+        public void ClearSpins()
+        {
+            spins.Clear();
+        }
         
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LuckySpin.Models;
+using LuckySpin.ViewModels;
 
 namespace LuckySpin.Controllers
 {
@@ -31,65 +32,63 @@ namespace LuckySpin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(Player player)
+        public IActionResult Index(IndexViewModel info)
         {
-            if (ModelState.IsValid) {
-                //Save the current player in the repository
-                repository.CurrentPlayer = player;
-                repository.CurrentPlayer.AddCredit(player.StartingBalance);
-                return RedirectToAction("SpinIt");
-            }
+            if (!ModelState.IsValid) { return View(); }
 
-            return View();
+            //Set up Repository
+            repository.CurrentPlayer = new Player
+            {
+                FirstName = info.FirstName,
+                Luck = info.Luck,
+                Balance = info.StartingBalance
+            };
+            repository.ClearSpins();
+           
+            return RedirectToAction("SpinIt");
         }
 
         /***
-         * Spin Action
+         * Game play through one Spin
          **/  
          [HttpGet]      
-         public IActionResult SpinIt() //Remove input, use the repository
+         public IActionResult SpinIt()
         {
+            // Call constructor to create a new SpinItViewModel for this spin
+            // Use the player information in the repository
+            SpinItViewModel spinItVM = new SpinItViewModel() {
+                FirstName = repository.CurrentPlayer.FirstName,
+                Luck = repository.CurrentPlayer.Luck,
+                Balance = repository.CurrentPlayer.Balance
+            };
+
             //Check if enough balance to play, if not drop out to LuckList
-            if (!repository.CurrentPlayer.ChargeSpin())
+            if (!spinItVM.ChargeSpin())
             {
                 return RedirectToAction("LuckList");
             }
+            // Check for Winnings
+            if (spinItVM.Winner) { spinItVM.CollectWinnings(); }
 
-            //Create the current Spin
-            Spin spin = new Spin
+            //Update Player Balance
+            repository.CurrentPlayer.Balance = spinItVM.Balance;
+
+            //Store the Spin in the Repository
+            Spin spin = new Spin()
             {
-                Luck = repository.CurrentPlayer.Luck,
-                A = random.Next(1, 10),
-                B = random.Next(1, 10),
-                C = random.Next(1, 10)
+                IsWinning = spinItVM.Winner
             };
-            spin.IsWinning = (spin.A == spin.Luck || spin.B == spin.Luck || spin.C == spin.Luck);
-
-            //Add to Spin Repository
             repository.AddSpin(spin);
 
-            //Prepare the View
-            if (spin.IsWinning)
-            {
-                ViewBag.Display = "block";
-                repository.CurrentPlayer.CollectWinnings();
-            }
-            else
-                ViewBag.Display = "none";
-
-            ViewBag.FirstName = repository.CurrentPlayer.FirstName;
-            ViewBag.Balance = repository.CurrentPlayer.Balance;
-
-            return View("SpinIt", spin);
+            return View("SpinIt", spinItVM);
         }
 
         /***
          * ListSpins Action
          **/
-
+         [HttpGet]
          public IActionResult LuckList()
         {
-            ViewBag.Balance = 0;
             return View(repository.PlayerSpins);
         }
 

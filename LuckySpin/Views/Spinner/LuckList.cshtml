@@ -1,19 +1,20 @@
 ﻿@model IEnumerable<LuckySpin.Models.Spin>
+@inject LuckySpin.Models.Repository repo
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "_Layout";
-    int num = 1;
-    string result;
+    int num = 0;
+    var culture = new System.Globalization.CultureInfo("en-US");
 }
 <h1>Out of Luck</h1>
-<h2>Final Balance: <span asp-for="Balance">@ViewBag.Balance.ToString("C")</span></h2>
+<h2>Final Balance: @repo.CurrentPlayer.Balance.ToString("C",culture)</h2>
 <table>
     <thead><tr><th>Spin #</th><th>Result</th></tr></thead>
     <tbody>
         @foreach (LuckySpin.Models.Spin spin in @Model)
         {
-            result = (spin.IsWinning) ? "Win" : "Lose";
-            num += 1;
+            var result = (spin.IsWinning) ? "Win" : "Lose";
+            num++; //increment the row number
             <tr @if (spin.IsWinning)
                 {<text> style='background-color:lightgreen;' </text> }
                 >

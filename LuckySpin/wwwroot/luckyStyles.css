@@ -1,28 +1,32 @@
-﻿body{
-    background-color:khaki;
+﻿body {
+    background-color: khaki;
 }
+
 h1 {
     font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
     font-size: 2.5em;
     margin: .3em 0;
 }
+
 h2 {
-    margin-left:1.8em;
-    color:#611;
+    margin-left: 1.8em;
+    color: #611;
 }
+
 div {
-       display:inline-block;
-       width:35px;
-       font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif;
-       font-size:2em;
-       font-weight:bold;
-       background-color:lightyellow;
-       border:solid thin;
-       border-color:darkgoldenrod;
-       padding:5px;
-       margin:2px;
-       text-align:center;
+    display: inline-block;
+    width: 35px;
+    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+    font-size: 2em;
+    font-weight: bold;
+    background-color: lightyellow;
+    border: solid thin;
+    border-color: darkgoldenrod;
+    padding: 5px;
+    margin: 2px;
+    text-align: center;
 }
+
 input:not([type]), input[type='text'], input[type='password'], option {
     border-radius: 8px;
     border: solid 2px rosybrown;
@@ -36,6 +40,7 @@ button, [type="submit"] {
     background-color: firebrick;
     color: beige;
 }
+
 fieldset {
     display: block;
     width: 200px;
@@ -43,16 +48,39 @@ fieldset {
     background-color: #CC9999;
     margin: 0 0 .5em 1em;
 }
-fieldset > label {
+
+    fieldset > label {
         display: block;
         margin: .8em 0;
-}
+    }
+
 img {
     border: dotted .5em darkred;
     border-top-left-radius: 50% 50%;
     border-top-right-radius: 50% 50%;
     border-bottom-right-radius: 50% 50%;
     border-bottom-left-radius: 50% 50%;
+}
+
+.balance {
+    width: 210px;
+    font-size: 1.2em;
+    display: block;
+    margin-top: 10px;
+}
+
+    .balance .emphasis {
+        font-weight: bolder;
+        color: #811;
+    }
+
+input.currency {
+    width: 90%;
+    border-radius: 0;
+}
+
+.winner {
+    background-color: lightgreen;
 }
 
 .field-validation-error {
@@ -151,6 +179,7 @@ td {
     -webkit-transform-origin: center bottom;
     transform-origin: center bottom;
 }
+
 .animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
