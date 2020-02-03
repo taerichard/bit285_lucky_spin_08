@@ -7,6 +7,9 @@
       "sslPort": 0
     }
   },
+  "ConnectionStrings": {
+    "LuckySpinDb": "Data Source=LuckySpin.db"
+  },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",

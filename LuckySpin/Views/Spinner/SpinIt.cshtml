@@ -9,6 +9,7 @@
 <div>@Model.A</div><div>@Model.B</div><div>@Model.C</div>
 <h2>Current Balance: @Model.Balance.ToString("C", culture)</h2>
 <span style="display:@display">
-    <h2>Congratulations @Model.FirstName,<br/>You Win with a Lucky @Model.Luck!</h2>
+    <h2>Congratulations @Model.FirstName,
+         <br/>You Win with a Lucky @Transform.numberToText(@Model.Luck)!</h2>
     <img src="/Images/LuckySpinCoins.jpg" class="animated bounce" alt="Coins"/>
 </span>

@@ -10,15 +10,15 @@ namespace LuckySpin.Controllers
 {
     public class SpinnerController : Controller
     {
-        private Repository repository;
+        private LuckySpinContext _dbc;
         Random random = new Random();
 
         /***
          * Controller Constructor
          */
-        public SpinnerController(Repository r)
+        public SpinnerController(LuckySpinContext luckySpinContext)
         {
-            repository = r;
+            _dbc = luckySpinContext;
         }
 
         /***
@@ -36,49 +36,54 @@ namespace LuckySpin.Controllers
         {
             if (!ModelState.IsValid) { return View(); }
 
-            //Set up Repository
-            repository.CurrentPlayer = new Player
+            //Save Player in Repository
+            Player player = new Player
             {
                 FirstName = info.FirstName,
                 Luck = info.Luck,
                 Balance = info.StartingBalance
             };
-            repository.ClearSpins();
+            _dbc.Players.Add(player);
+            _dbc.SaveChanges();
            
-            return RedirectToAction("SpinIt");
+            return RedirectToAction("SpinIt", new { id = player.Id } );
         }
 
         /***
          * Game play through one Spin
          **/  
          [HttpGet]      
-         public IActionResult SpinIt()
+         public IActionResult SpinIt(long id)
         {
-            // Call constructor to create a new SpinItViewModel for this spin
-            // Use the player information in the repository
+            //** Gets the Player belonging to the given id
+            Player player = _dbc.Players.Find(id);
+            // Populates a new SpinItViewModel for this spin
+            // using the player information
             SpinItViewModel spinItVM = new SpinItViewModel() {
-                FirstName = repository.CurrentPlayer.FirstName,
-                Luck = repository.CurrentPlayer.Luck,
-                Balance = repository.CurrentPlayer.Balance
+                FirstName = player.FirstName,
+                Luck = player.Luck,
+                Balance = player.Balance
             };
 
-            //Check if enough balance to play, if not drop out to LuckList
+            //Checks if enough balance to play, if not drop out to LuckList
             if (!spinItVM.ChargeSpin())
             {
-                return RedirectToAction("LuckList");
+                return RedirectToAction("LuckList", new { id = player.Id });
             }
-            // Check for Winnings
+            // Checks for Winnings
             if (spinItVM.Winner) { spinItVM.CollectWinnings(); }
 
-            //Update Player Balance
-            repository.CurrentPlayer.Balance = spinItVM.Balance;
-
-            //Store the Spin in the Repository
+            //** Updates Player Balance
+            player.Balance = spinItVM.Balance;
+        
             Spin spin = new Spin()
             {
                 IsWinning = spinItVM.Winner
             };
-            repository.AddSpin(spin);
+            //** Adds the Spin to the Database Context
+            _dbc.Spins.Add(spin);
+            //**** Saves all the changes to the Database at once
+            _dbc.SaveChanges();
 
             return View("SpinIt", spinItVM);
         }
@@ -87,9 +92,16 @@ namespace LuckySpin.Controllers
          * ListSpins Action
          **/
          [HttpGet]
-         public IActionResult LuckList()
+         public IActionResult LuckList(long id)
         {
-            return View(repository.PlayerSpins);
+            //Gets the Player belonging to the given id
+            Player player = _dbc.Players.Find(id);
+            //Gets the list of Spins from the Context
+            IEnumerable<Spin> spins = _dbc.Spins;
+            // Hack in some detail about the player
+            ViewBag.Player = player;
+
+            return View(spins);
         }
 
     }
