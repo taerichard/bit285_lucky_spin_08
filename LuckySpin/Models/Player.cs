@@ -9,5 +9,8 @@ namespace LuckySpin.Models
         public String FirstName { get; set; }
         public int Luck { get; set; }
         public Decimal Balance { get; set; }
+
+        //TODO: Add a Navigation Property representing the Player's Spins
+
     }
 }
