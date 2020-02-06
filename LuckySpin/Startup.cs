@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +20,10 @@ namespace LuckySpin
         {
             services.AddMvc();
             services.AddTransient<TextTransformService>();
-            //services.AddSingleton<Repository>();
-           
-
             services.AddDbContext<LuckySpinContext>(options =>
-            options.UseSqlite(Configuration.GetConnectionString("LuckySpinDb")));
-
+            options.UseSqlServer(Configuration.GetConnectionString("LuckySpinDb")));
+            //TODO: (Mac) Adjust the DbContext options to
+            //  options.UseSqlite(...)
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
