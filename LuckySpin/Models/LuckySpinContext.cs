@@ -11,5 +11,6 @@ namespace LuckySpin.Models
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Spin> Spins { get; set; }
+
     }
 }

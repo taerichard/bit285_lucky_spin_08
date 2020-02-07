@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using LuckySpin.Models;
 using LuckySpin.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuckySpin.Controllers
 {
@@ -54,7 +55,11 @@ namespace LuckySpin.Controllers
             //** Gets the Player belonging to the given id
             //TODO: Modify the code to use the SingleOrDefault Lamda Extension method
             //TODO: Then Include the Players Spins collection
-            Player player = _dbc.Players.Find(id);
+
+            Player player = _dbc.Players
+                .Include(p => p.Spins)
+                .SingleOrDefault(x => x.Id == id);
+
             // Populates a new SpinItViewModel for this spin
             // using the player information
             SpinItViewModel spinItVM = new SpinItViewModel() {
