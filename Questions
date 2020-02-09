@@ -1,0 +1,13 @@
+08 - LuckySpins - EF Relationships
+
+1.  The Spins property is the navigation property because it holds all the spins for the particular player.  
+
+2.  The number of spins is added when you play another game.  When the name changed, the spin got added from the prior spins.  
+
+3.  The players table displays the different players with proper data, but the Spins table only displays data on top of each other which makes me think the playerID is zero for every spin.  
+
+4.  The "SingleOrDefault" will only and ever return one row of that specific element, results should be ignored if more than one result exists.  So in our situation, it is only getting the player that we just spinned on.  
+ 
+ The "Find" method uses the PK value to attempt to find that entity tracked by the context.  If not found, the query will be sent to the db to find the entity there.  Our context is "LuckySpinContext" so in this situaiton, if the "find" method can't find anything from our context, then will go to the db. 
+ 
+ 5. The new spin record displays the ID that corresponds with the player and adds the spins on top of each other.    

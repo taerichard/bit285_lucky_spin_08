@@ -85,7 +85,10 @@ namespace LuckySpin.Controllers
             };
             //** Adds the Spin to the Database Context
             //TODO: Modify the next line to use the player's Spins collection instead
-            _dbc.Spins.Add(spin);
+            //_dbc.Spins.Add(spin);
+            player.Spins.Add(spin);
+            _dbc.Add(spin);
+
             //**** Saves all the changes to the Database at once
             _dbc.SaveChanges();
 
